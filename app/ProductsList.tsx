@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import useFetch from "./hooks/useFetch";
-import { Product } from "./type";
+import useFetch from "@/hooks/useFetch";
+import { Product } from "../type";
 
 const ProductsList = () => {
 	const { data, loading, error } = useFetch<Product[]>("https://fakestoreapi.com/products");
