@@ -1,50 +1,44 @@
-import useFetch from "@/hooks/useFetch";
+import type { Metadata, ResolvingMetadata } from "next";
 import { Product } from "@/type";
-import { useCart } from "@/context/CardContext";
 import Link from "next/link";
+import AddToCartButton from "./AddToCartButton";
 
-const ProductPage = ({ params }: { params: { id: number } }) => {
-	const {
-		data: product,
-		loading,
-		error,
-	} = useFetch<Product>(`https://fakestoreapi.com/products/${params.id}`);
+type Props = {
+	params: { id: string };
+};
 
-	const cartContext = useCart();
-	if (!cartContext) {
-		return;
+const fetchProduct = async (id: string): Promise<Product> => {
+	const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+	if (!res.ok) {
+		throw new Error("Failed to fetch product.");
 	}
-	const { cart, addToCart } = cartContext;
+	return res.json();
+};
 
-	if (cart) {
-		console.log(cart);
-	}
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const id = params.id;
+	const product = await fetchProduct(id);
+	return {
+		title: product.title,
+	};
+}
 
-	if (loading) {
-		return <div>Loading...</div>;
-	}
+const ProductPage = async ({ params }: Props) => {
+	const product = await fetchProduct(params.id);
 
-	if (error) {
-		return <div>Error: {error.message}</div>;
-	}
-
-	if (product) {
-		return (
+	return (
+		<div>
+			<span>Hello Page {params.id}</span>
+			<Link href="/cart">Voir le panier</Link>
 			<div>
-				<Link href="/cart">Voir le panier</Link>
-				<span>Hello Page {params.id}</span>
-				<div>
-					<span>{product.title}</span>
-					<span>{product.price} €</span>
-					<p>{product.description}</p>
-					<img src={product.image} alt={product.title} />
-					{/* <button onClick={() => addToCart(product)}>Ajouter au panier</button> */}
-				</div>
+				<span>{product.title}</span>
+				<span>{product.price} €</span>
+				<p>{product.description}</p>
+				<img src={product.image} alt={product.title} />
+				<AddToCartButton product={product} />
 			</div>
-		);
-	}
-
-	return null;
+		</div>
+	);
 };
 
 export default ProductPage;
