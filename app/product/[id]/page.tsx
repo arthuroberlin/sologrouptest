@@ -12,11 +12,21 @@ import Layout from "./layout";
 
 const fetchProduct = async (id: string): Promise<Product> => {
 	const res = await fetch(`https://fakestoreapi.com/products/${id}`);
+
+	if (res.status === 404) {
+		throw new Error("Produit introuvable.");
+	}
 	if (!res.ok) {
 		throw new Error("Impossible de charger le produit.");
 	}
 
-	return res.json();
+	try {
+		return JSON.parse(await res.text());
+	} catch (error) {
+		throw new Error(
+			"L'article n'existe pas ou alors nous avons un problème du côté de nos serveurs."
+		);
+	}
 };
 
 const ProductPage = async ({ params }: { params: { id: string } }) => {
