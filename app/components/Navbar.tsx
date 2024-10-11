@@ -48,7 +48,20 @@ const Navbar = () => {
 					</Link>
 				</li>
 				<li className="navbar-link-facility hover-underline-animation">
-					<a className="navbar-link-facility" href="">
+					<a
+						className="navbar-link-facility"
+						href="https://sologrouptest.vercel.app/"
+						target="_blank"
+					>
+						Live
+					</a>
+				</li>
+				<li className="navbar-link-facility hover-underline-animation">
+					<a
+						className="navbar-link-facility"
+						href="https://github.com/arthuroberlin/sologrouptest"
+						target="_blank"
+					>
 						Github
 					</a>
 				</li>
