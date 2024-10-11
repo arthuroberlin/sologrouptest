@@ -1,30 +1,9 @@
 import React from "react";
 import Image from "next/image";
-import type { Metadata } from "next";
 import { Product } from "@/type";
 import AddToCartButton from "./AddToCartButton";
 import ClientErrorHandler from "@/app/components/ClientErrorHandler";
-
-type Props = {
-	params: { id: string };
-};
-
-/* ---//--- Gestion dynamique des métas-datas  ---//--- */
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const id = params.id;
-	try {
-		const product = await fetchProduct(id);
-		return {
-			title: product.title,
-			description: product.description,
-		};
-	} catch (err) {
-		return {
-			title: "Produit introuvable",
-			description: "Impossible de charger la description du produit.",
-		};
-	}
-}
+import Layout from "./layout";
 
 /* ---//--- 
 - Fetch des données DU produit
@@ -53,45 +32,47 @@ const ProductPage = async ({ params }: { params: { id: string } }) => {
 
 	/* ---//--- Le handler permet de gérer les erreurs côtés clients sans bloquer le composant  ---//--- */
 	return (
-		<ClientErrorHandler error={error ?? ""}>
-			<div className="container mx-auto pt-12 px-6">
-				{product ? (
-					<div className="flex items-center flex-col gap-9 md:gap-0 md:flex-row">
-						{/* ---//--- Image ( Partie gauche ) ---//--- */}
-						<div className="md:w-1/2 p-4">
-							<Image
-								src={product.image}
-								alt={product.title}
-								width={400}
-								height={400}
-								priority
-								quality={100}
-								className="w-full h-auto max-w-sm object-cover mx-auto"
-							/>
+		<Layout params={params}>
+			<ClientErrorHandler error={error ?? ""}>
+				<div className="container mx-auto pt-12 px-6">
+					{product ? (
+						<div className="flex items-center flex-col gap-9 md:gap-0 md:flex-row">
+							{/* ---//--- Image ( Partie gauche ) ---//--- */}
+							<div className="md:w-1/2 p-4">
+								<Image
+									src={product.image}
+									alt={product.title}
+									width={400}
+									height={400}
+									priority
+									quality={100}
+									className="w-full h-auto max-w-sm object-cover mx-auto"
+								/>
+							</div>
+							{/* ---//--- Informations ( Partie droite ) ---//--- */}
+							<div className="flex flex-col items-start gap-8 md:w-1/2 p-4">
+								<h1 className="text-3xl font-bold">{product.title}</h1>
+								<span className="text-2xl font-bold text-[var(--primaryImportantColor)]">
+									{product.price} €
+								</span>
+								{/* ---//--- Plusieurs articles renvoyés par l'API on des descriptions sans majuscule. ---//--- */}
+								<p className="text-gray-700">
+									{product.description
+										? product.description.charAt(0).toUpperCase() + product.description.slice(1)
+										: "Aucune description disponible pour cet article. 🤔"}
+								</p>
+								<AddToCartButton product={product} />
+							</div>
 						</div>
-						{/* ---//--- Informations ( Partie droite ) ---//--- */}
-						<div className="flex flex-col items-start gap-8 md:w-1/2 p-4">
-							<h1 className="text-3xl font-bold">{product.title}</h1>
-							<span className="text-2xl font-bold text-[var(--primaryImportantColor)]">
-								{product.price} €
-							</span>
-							{/* ---//--- Plusieurs articles renvoyés par l'API on des descriptions sans majuscule. ---//--- */}
-							<p className="text-gray-700">
-								{product.description
-									? product.description.charAt(0).toUpperCase() + product.description.slice(1)
-									: "Aucune description disponible pour cet article. 🤔"}
-							</p>
-							<AddToCartButton product={product} />
+					) : (
+						<div className="flex items-center w-full h-24 justify-center text-red-600 mt-12">
+							{/* ---//--- Malgré le toaster, j'affiche un message constant à l'utilisateur ---//--- */}
+							{error} 😟
 						</div>
-					</div>
-				) : (
-					<div className="flex items-center w-full h-24 justify-center text-red-600 mt-12">
-						{/* ---//--- Malgré le toaster, j'affiche un message constant à l'utilisateur ---//--- */}
-						{error} 😟
-					</div>
-				)}
-			</div>
-		</ClientErrorHandler>
+					)}
+				</div>
+			</ClientErrorHandler>
+		</Layout>
 	);
 };
 
