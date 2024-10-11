@@ -3,25 +3,48 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --primaryBackgroundColor: #ffffff;
+  --primaryTextColor: #000000;
+  --primaryImportantColor: #2563eb;
+  --secondaryImportantColor: #1d4ed8;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--primaryTextColor);
+  background: var(--primaryBackgroundColor);
+  @apply font-normal text-lg;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/*---//--- Style du bouton de l'application ---//---*/
+.primary-button {
+  @apply text-lg rounded-xl py-2 px-4 text-white bg-[var(--primaryImportantColor)] hover:scale-105 hover:bg-[var(--secondaryImportantColor)] transition-transform duration-300;
+}
+
+/*---//--- Facilite le clic en aggrandissant le lien de la navBar, utile surtout sur mobile ---//---*/
+.navbar-link-facility {
+  @apply flex items-center h-14;
+}
+
+/*---//--- Animation des liens de la navBar ---//---*/
+.hover-underline-animation {
+  position: relative;
+  display: inline-block;
+}
+
+.hover-underline-animation::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primaryImportantColor);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.hover-underline-animation:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
