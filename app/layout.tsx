@@ -1,14 +1,22 @@
 import { ReactNode, Suspense } from "react";
 import { CartProvider } from "@/context/CardContext";
+import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import Loading from "./loading";
 import Navbar from "./components/Navbar";
 import "./globals.css";
 
+/* ---//--- Font ---//--- */
 const poppins = Poppins({
 	weight: ["500", "600", "700", "800"],
 	subsets: ["latin"],
 });
+
+/* ---//--- Metadata ---//--- */
+export const metadata: Metadata = {
+	title: "SoloGroup - Accueil",
+	description: "Page d'accueil de l'application test de Arthur Oberlin--Martins pour SoloGroup.",
+};
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
 	return (

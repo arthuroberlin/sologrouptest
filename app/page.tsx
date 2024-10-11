@@ -1,15 +1,8 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { Product } from "@/type";
 import ProductsList from "./ProductsList";
 import CartGif from "@/public/cart.gif";
 import ClientErrorHandler from "./components/ClientErrorHandler";
-
-/* ---//--- Metas-datas ---//--- */
-export const getMetadata: () => Metadata = () => ({
-	title: "SoloGroup - Accueil",
-	description: "Page d'accueil de l'application test de Arthur Oberlin--Martins pour SoloGroup.",
-});
 
 /* ---//--- 
 - Fetch des données DU produit
