@@ -1,9 +1,9 @@
-export default function Loading() {
+const Loading = () => {
 	return (
-		<div role="status">
+		<div className="w-full h-32 flex justify-center items-center" role="status">
 			<svg
 				aria-hidden="true"
-				className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+				className="w-12 h-12 text-gray-200 animate-spin fill-[var(--primaryImportantColor)]"
 				viewBox="0 0 100 101"
 				fill="none"
 				xmlns="http://www.w3.org/2000/svg"
@@ -19,4 +19,6 @@ export default function Loading() {
 			</svg>
 		</div>
 	);
-}
+};
+
+export default Loading;
